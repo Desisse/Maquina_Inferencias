@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test de Ansiedad</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #FAE7C9;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 400px;
+        margin: 50px auto;
+        background-color: #EAD7BB;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2 {
+        text-align: center;
+        color: #706233;
+    }
+    p {
+        color: #706233;
+        margin-bottom: 20px;
+    }
+    button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        background-color: #E1C78F;
+        color: #000000;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+    }
+    button:hover {
+        background-color: #E1C78F;
+    }
+    .result-container {
+        background-color: #E1C78F;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+    .result-container h2 {
+        color: #706233;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .result-message {
+        color: #706233;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Test de Ansiedad</h1>
+    <p>Responde las siguientes preguntas para determinar si puedes estar experimentando ansiedad.</p>
+    <button id="startButton">Comenzar</button>
+    <div id="questions" style="display: none;">
+        <h2 id="questionTitle"></h2>
+        <p id="questionText"></p>
+        <label><input type="radio" name="answer" value="si"> Sí</label>
+        <label><input type="radio" name="answer" value="no"> No</label>
+        <button id="nextButton">Siguiente</button>
+    </div>
+    <div id="result" class="result-container" style="display: none;">
+        <h2>Resultado</h2>
+        <p id="resultMessage" class="result-message"></p>
+    </div>
+</div>
+
+<script>
+    const startButton = document.getElementById('startButton');
+    const questionsContainer = document.getElementById('questions');
+    const questionTitle = document.getElementById('questionTitle');
+    const questionText = document.getElementById('questionText');
+    const nextButton = document.getElementById('nextButton');
+    const resultContainer = document.getElementById('result');
+    const resultMessage = document.getElementById('resultMessage');
+    const answers = [];
+    let currentQuestionIndex = 0;
+
+    const questions = [
+        { title: "Pregunta 1", text: "¿Te sientes nervioso/a con frecuencia?" },
+        { title: "Pregunta 2", text: "¿Tienes dificultad para conciliar el sueño?" },
+        { title: "Pregunta 3", text: "¿Te sientes constantemente tenso/a o preocupado/a?" },
+        { title: "Pregunta 4", text: "¿Te preocupas excesivamente por situaciones futuras o eventos que pueden ocurrir?" },
+        { title: "Pregunta 5", text: "¿Experimentas sintomas fisicos como tension muscular, dolores de cabeza o problemas gastrointestinales debido a la ansiedad?" },
+        { title: "Pregunta 6", text: "¿Te encuentras evitando situaciones o actividades que te provocan ansiedad?" },
+        { title: "Pregunta 7", text: "¿Tienes dificultades para relajarte o experimentas una sensacion de constante alerta?" },
+        { title: "Pregunta 8", text: "¿Has experimentado ataques de panico repentinos e intensos?" },
+        { title: "Pregunta 9", text: "¿Te sientes constantemente tenso/a o irritable sin una razon clara?" },
+        { title: "Pregunta 10", text: "¿Te resulta dificil controlar tus preocupaciones o pensamientos?" }
+    ];
+
+    startButton.addEventListener('click', () => {
+        startButton.style.display = 'none';
+        showQuestion();
+    });
+
+    nextButton.addEventListener('click', () => {
+        const answer = document.querySelector('input[name="answer"]:checked');
+
+        if (!answer) {
+            alert('Por favor selecciona una respuesta.');
+            return;
+        }
+
+        answers.push(answer.value);
+
+        if (currentQuestionIndex < questions.length - 1) {
+            currentQuestionIndex++;
+            showQuestion();
+        } else {
+            showResult();
+        }
+    });
+
+    function showQuestion() {
+        const currentQuestion = questions[currentQuestionIndex];
+        questionTitle.textContent = currentQuestion.title;
+        questionText.textContent = currentQuestion.text;
+        questionsContainer.style.display = 'block';
+    }
+
+    function showResult() {
+        questionsContainer.style.display = 'none';
+        resultContainer.style.display = 'block';
+
+        const totalYes = answers.filter(answer => answer === 'si').length;
+
+        let message;
+        if (totalYes >= 5) {
+            message = 'Es posible que estés experimentando ansiedad. Te recomendamos buscar ayuda profesional.';
+        } else {
+            message = 'Es menos probable que estés experimentando ansiedad, pero siempre es importante cuidar tu bienestar emocional.';
+        }
+
+        resultMessage.textContent = message;
+    }
+</script>
+
+</body>
+</html>
